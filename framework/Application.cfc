@@ -42,6 +42,8 @@ component {
         return _get_framework_one().onApplicationStart();
     }
     function onError( exception, event ) {
+        writeDump(exception)
+        abort;
         return _get_framework_one().onError( exception, event );
     }
     function onRequest( targetPath ) {

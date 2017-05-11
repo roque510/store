@@ -4,19 +4,14 @@
 		<cfargument name="User" type="string" default="">
 		<cfargument name="Password" type="string" default="">
 
-			<cfquery name="loginVerified" datasource="ecommerce">
-				SELECT *
-				FROM users
-				WHERE UserEmail = <cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.User#">
-				AND UserPassword = <cfqueryparam cfsqltype="cf_sql_varchar" value="#ARGUMENTS.Password#">
-				AND admin = 1
-			</cfquery>
+			<cfset adminLogin = new admin.model.DAO.adminDAO() >
+			<cfset adminLoginSuccess = adminLogin.checkLogin(ARGUMENTS.User,ARGUMENTS.Password)>
 
-			<cfif loginVerified.recordCount EQ 1>
-				<cfset SESSION.isLogged = 	TRUE>
-				<cfset SESSION.fname	=	loginVerified.UserFirstName>
-				<cfset SESSION.lname	=	loginVerified.UserLastName>	
+			<cfif adminLoginSuccess.recordCount EQ 1>
+				<cfreturn adminLoginSuccess>	
 			</cfif>
+
+			<cfdump var="#session#" abort="false">
 		
 	</cffunction>
 

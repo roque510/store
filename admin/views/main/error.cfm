@@ -5,6 +5,7 @@
 	<div style="width: 100%; text-align: left;">
 		<p><b>An error occurred!</b></p>
 		<cfoutput>
+			<cfdump var="#request.exception#" abort="true">
 			<cfif structKeyExists( request, 'failedAction' )>
                 <!--- sanitize user supplied value before displaying it --->
 				<b>Action:</b> #replace( request.failedAction, "<", "&lt;", "all" )#<br/>

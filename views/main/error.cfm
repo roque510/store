@@ -4,6 +4,7 @@
 	<h1 style="color: red;">ERROR!</h1>
 	<div style="width: 100%; text-align: left;">
 		<p><b>An error occurred!</b></p>
+		<cfdump var="#request.exception#" abort="true">
 		<cfoutput>
 			<cfif structKeyExists( request, 'failedAction' )>
                 <!--- sanitize user supplied value before displaying it --->

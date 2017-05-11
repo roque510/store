@@ -712,6 +712,7 @@ component {
      * in the code...
      */
     public void function onError( any exception, string event ) {
+        
         try {
             if ( !structKeyExists( variables, 'framework' ) ||
                  !structKeyExists( variables.framework, 'version' ) ) {
