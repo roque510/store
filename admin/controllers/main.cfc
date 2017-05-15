@@ -27,7 +27,7 @@
 		<cfif loginFound.recordCount EQ 1 >
 			<cfset SESSION.isLogged = 	TRUE>
 			<cfset SESSION.fname	=	loginFound.UserFirstName>
-			<cfset SESSION.lname	=	loginFound.UserLastName>	
+			<cfset SESSION.lname 	=	loginFound.UserLastName>	
 
 			<cflocation url="index.cfm?action=main.adminHome">
 		</cfif>
@@ -52,6 +52,16 @@
 			</cfif>
 
 			<cfdump var="inside the admin sliders function">
+			<cfset variables.framework.setLayout('main.adminHome',true)>
+	</cffunction>
+
+	<cffunction name="sliderInsert" returntype="void" access="public">
+
+			<!--- Check if any button from the side bar has already been clicked --->
+			<cfdump var="#form#">
+
+			<cfdump var="inside the admin sliders function">
+			<cfset variables.framework.setView('main.adminSliders')>
 			<cfset variables.framework.setLayout('main.adminHome',true)>
 	</cffunction>
 
