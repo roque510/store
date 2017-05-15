@@ -6,8 +6,8 @@
 </div>
 
 <cfset path = expandPath("/views/main/includes/promotext.cfm")>
-<cfinclude template="../main/includes/promotext.cfm">
+<!--- <cfinclude template="../main/includes/promotext.cfm">
 
-<cfinclude template="../main/includes/promophoto.cfm">
+<cfinclude template="../main/includes/promophoto.cfm"> --->
 
 

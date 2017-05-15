@@ -8,15 +8,17 @@ var server = lr();
 var minifyCSS = require('gulp-minify-css');
 var embedlr = require('gulp-embedlr');
 var sass = require('gulp-sass');
-
+var browserSync = require('browser-sync').create();
 //style paths
-var sassFiles = 'assets/styles/sass/**/*.scss',  
-    cssDest = 'assets/styles/css/';
+var sassFiles = 'app/assets/styles/sass/**/*.scss',  
+    cssDest = 'app/assets/styles/css/';
 
 gulp.task('styles', function(){  
     gulp.src(sassFiles)
         .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest(cssDest));
+        .pipe(minifyCSS())
+        .pipe(gulp.dest(cssDest))
+        
 });
 
 gulp.task('scripts', function() {
@@ -27,13 +29,26 @@ gulp.task('scripts', function() {
         .pipe(refresh(server))
 })
 
-gulp.task('styles', function() {
-    gulp.src(['app/css/style.less'])
-        .pipe(less())
-        .pipe(minifyCSS())
-        .pipe(gulp.dest('dist/build'))
-        .pipe(refresh(server))
-})
+gulp.task('serve',['styles'], function() {
+
+    browserSync.init({
+        proxy: "http://local.store.com:8080/app",
+        files: ['app/views/**/*.cfm']
+    });
+
+    gulp.watch(sassFiles, ['styles']).on('change', browserSync.reload);
+    gulp.watch("app/**/*.cfm").on('change', browserSync.reload);
+});
+
+// Compile sass into CSS & auto-inject into browsers
+
+// gulp.task('styles', function() {
+//     gulp.src(['app/assets/styles/style.less'])
+//         .pipe(less())
+//         .pipe(minifyCSS())
+//         .pipe(gulp.dest('dist/build'))
+//         .pipe(refresh(server))
+// })
 
 gulp.task('lr-server', function() {
     server.listen(35729, function(err) {
@@ -42,24 +57,10 @@ gulp.task('lr-server', function() {
 })
 
 gulp.task('html', function() {
-    gulp.src("app/*.html")
+    gulp.src("app/*.cfm")
         .pipe(embedlr())
         .pipe(gulp.dest('dist/'))
         .pipe(refresh(server));
 })
 
-gulp.task('default', function() {
-    gulp.run('lr-server', 'scripts', 'styles', 'html');
-
-    gulp.watch('app/src/**', function(event) {
-        gulp.run('scripts');
-    })
-
-    gulp.watch('app/css/**', function(event) {
-        gulp.run('styles');
-    })
-
-    gulp.watch('app/**/*.html', function(event) {
-        gulp.run('html');
-    })
-})
+gulp.task('default', ['serve'])
